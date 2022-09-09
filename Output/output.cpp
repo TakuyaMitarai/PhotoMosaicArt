@@ -196,7 +196,8 @@ int main()
         }
         d = 1;
     }
-    
-    cv::imshow("PhotoMosaicArt",img);
+    cv::Mat img2(img.rows*4/3, img.cols, img.type());
+    cv::resize(img, img2, img2.size(), cv::INTER_CUBIC);
+    cv::imshow("PhotoMosaicArt",img2);
     cv::waitKey(0);
 }
