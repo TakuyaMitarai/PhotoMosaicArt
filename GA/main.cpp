@@ -13,6 +13,7 @@ using namespace std;
 vector<int> B, G, R;
 vector<int> OB, OG, OR;
 
+//カンマ区切りで読み込む関数
 vector<string> split(string& input, char delimiter)
 {
     istringstream stream(input);
@@ -27,13 +28,14 @@ vector<string> split(string& input, char delimiter)
 int main()
 {
     int i;
-    float comptime;
     Population* pop;
    
     srand((unsigned int)time(NULL));
 
-    ifstream ifs("../MaterialProcessing/OriginalResult.csv");
+    //元画像を2025(=45 * 45)分割して，部分ごとに画素値の中央値を記述したファイルをopen
+    ifstream ifs("../OriginalProcessing/OriginalResult.csv");
 
+    //画素値読込
     string line;
     while (getline(ifs, line)) {
 
@@ -43,12 +45,11 @@ int main()
         OG.push_back(stoi(strvec.at(1)));
         OR.push_back(stoi(strvec.at(2)));
     }
-    /*for (int i=0; i< OB.size();i++){
-        cout << OB[i] << " " << OG[i] << " " << OR[i] << endl;
-    }*/
 
+    //素材画像9000(= 1500 * 6)枚の画素値の中央値を記述したファイルをopen
     ifstream ifs2("../MaterialProcessing/MaterialResult.csv");
 
+    //画素値読込
     string line2;
     while (getline(ifs2, line2)) {
 
@@ -58,30 +59,12 @@ int main()
         G.push_back(stoi(strvec.at(1)));
         R.push_back(stoi(strvec.at(2)));
     }
-    /*for (i=0; i<B.size();i++){
-        cout << B[i] << " " << G[i] << " " << R[i] << endl;
-    }*/
 
-    /*cv::Mat image(cv::Size(270 ,180), CV_8UC3);
-    int cnt = 0;
-    for(int ys = 0; ys < 45; ys++) {
-        for(int xs = 0; xs < 45; xs++) {
-            for(int y = ys * 4; y < ys * 4 + 4; y++) {
-                for(int x = xs * 6; x < xs * 6 + 6; x++) {
-                    image.at<cv::Vec3b>(y, x)[0] = OB[cnt];
-                    image.at<cv::Vec3b>(y, x)[1] = OG[cnt];
-                    image.at<cv::Vec3b>(y, x)[2] = OR[cnt];
-                }
-            }
-            cnt++;
-        }
-    }
-    cv::imshow("original", image);
-    cv::waitKey(0);
-    */
+    //素材画像の並べ方を書き込むファイルをopen
     FILE *fp;
     fp = fopen("Result.csv", "w");
 
+    //遺伝的アルゴリズムの試行
     pop = new Population();
     for(i = 1; i <= GEN_MAX; i++) {
         pop->alternate();

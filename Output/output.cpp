@@ -9,7 +9,7 @@
 #include <iostream>
 using namespace std;
 
-#define WidthSize 60
+#define WidthSize 120
 vector<string> split(string& input, char delimiter)
 {
     istringstream stream(input);
@@ -23,9 +23,10 @@ vector<string> split(string& input, char delimiter)
 
 int main() 
 {
-    string FolderName = "../material/R";
-    string FN;
+    string FolderName = "../material/R";    //ファイルパス共通部分
+    string FN;    //ファイルパス
 
+    //素材画像の並べ方を記述したファイルをopen
     ifstream ifs("../GA/Result.csv");
 
     int cnt;
@@ -38,9 +39,9 @@ int main()
        
     }
 
+    //読込
     for(int i = 0; i < 2025; i++) {
         s.push_back(stoi(strvec.at(i)));
-        //cout << (int)stoi(strvec.at(i)) << " ";
     }
     cv::Mat img;
     cv::Mat x;
@@ -49,101 +50,12 @@ int main()
     int e = 1;
     cnt = 0;
 
-    /*
-    if((s[cnt] / 6) < 10) {
-            FN = FolderName + "0000" + to_string(s[cnt] / 6) + ".jpg";
-            x = cv::imread(FN, 1);
-        } else if((s[cnt] / 6) < 100) {
-            FN = FolderName + "000" + to_string(s[cnt] / 6) + ".jpg";
-            x = cv::imread(FN, 1);
-        } else if((s[cnt] / 6) < 1000) {
-            FN = FolderName + "00" + to_string(s[cnt] / 6) + ".jpg";
-            x = cv::imread(FN, 1);
-        } else {
-        FN = FolderName + "0" + to_string(s[cnt] / 6) + ".jpg";
-        x = cv::imread(FN, 1);
-    }
-    double ResizeRate = (double)WidthSize / (double)x.size().width;
-    cv::resize(x, x, cv::Size(), ResizeRate, ResizeRate);
-    x = cv::Mat(x, cv::Rect(0, 0, 60, 30)).clone();
-
-    cout << x.size().width << " " << x.size().height << endl;
-
-    cnt++;
-    if((s[cnt] / 6) < 10) {
-            FN = FolderName + "0000" + to_string(s[cnt] / 6) + ".jpg";
-            y = cv::imread(FN, 1);
-        } else if((s[cnt] / 6) < 100) {
-            FN = FolderName + "000" + to_string(s[cnt] / 6) + ".jpg";
-            y = cv::imread(FN, 1);
-        } else if((s[cnt] / 6) < 1000) {
-            FN = FolderName + "00" + to_string(s[cnt] / 6) + ".jpg";
-            y = cv::imread(FN, 1);
-        } else {
-        FN = FolderName + "0" + to_string(s[cnt] / 6) + ".jpg";
-        y = cv::imread(FN, 1);
-    }
-    ResizeRate = (double)WidthSize / (double)y.size().width;
-    cv::resize(y, y, cv::Size(), ResizeRate, ResizeRate);
-    y = cv::Mat(y, cv::Rect(0, 0, 60, 30)).clone();
-
-    cout << y.size().width << " " << y.size().height << endl;
-
-    cnt++;
-
-    cv::hconcat(x, y, x);
-    img = x;
-
-    if((s[cnt] / 6) < 10) {
-            FN = FolderName + "0000" + to_string(s[cnt] / 6) + ".jpg";
-            x = cv::imread(FN, 1);
-        } else if((s[cnt] / 6) < 100) {
-            FN = FolderName + "000" + to_string(s[cnt] / 6) + ".jpg";
-            x = cv::imread(FN, 1);
-        } else if((s[cnt] / 6) < 1000) {
-            FN = FolderName + "00" + to_string(s[cnt] / 6) + ".jpg";
-            x = cv::imread(FN, 1);
-        } else {
-        FN = FolderName + "0" + to_string(s[cnt] / 6) + ".jpg";
-        x = cv::imread(FN, 1);
-    }
-    ResizeRate = (double)WidthSize / (double)x.size().width;
-    cv::resize(x, x, cv::Size(), ResizeRate, ResizeRate);
-    x = cv::Mat(x, cv::Rect(0, 0, 60, 30)).clone();
-
-    cout << x.size().width << " " << x.size().height << endl;
-
-    cnt++;
-    if((s[cnt] / 6) < 10) {
-            FN = FolderName + "0000" + to_string(s[cnt] / 6) + ".jpg";
-            y = cv::imread(FN, 1);
-        } else if((s[cnt] / 6) < 100) {
-            FN = FolderName + "000" + to_string(s[cnt] / 6) + ".jpg";
-            y = cv::imread(FN, 1);
-        } else if((s[cnt] / 6) < 1000) {
-            FN = FolderName + "00" + to_string(s[cnt] / 6) + ".jpg";
-            y = cv::imread(FN, 1);
-        } else {
-        FN = FolderName + "0" + to_string(s[cnt] / 6) + ".jpg";
-        y = cv::imread(FN, 1);
-    }
-    ResizeRate = (double)WidthSize / (double)y.size().width;
-    cv::resize(y, y, cv::Size(), ResizeRate, ResizeRate);
-    y = cv::Mat(y, cv::Rect(0, 0, 60, 30)).clone();
-
-    cout << y.size().width << " " << y.size().height << endl;
-
-    cnt++;
-
-    cv::hconcat(x, y, x);
-
-    cv::vconcat(img, x, img);
-    */
-    
     for(int ys = 0; ys < 45; ys++) {
         for(int xs = 0; xs < 45; xs++) {
             if(d == 1) {
                 cout << s[cnt] / 6  + 1 << endl;
+
+                //素材画像の読込
                 if((s[cnt] / 6  + 1) < 10) {
                     FN = FolderName + "0000" + to_string(s[cnt] / 6  + 1) + ".jpg";
                     x = cv::imread(FN, 1);
@@ -157,14 +69,19 @@ int main()
                     FN = FolderName + "0" + to_string(s[cnt] / 6  + 1) + ".jpg";
                     x = cv::imread(FN, 1);
                 }
+
+                //画像サイズを小さくする(120 × 80)
                 double ResizeRate = (double)WidthSize / (double)x.size().width;
                 cv::resize(x, x, cv::Size(), ResizeRate, ResizeRate);
 
-                x = cv::Mat(x, cv::Rect(0, 0, 60, 30)).clone();
+                //画像を3 : 2に調整
+                x = cv::Mat(x, cv::Rect(0, 0, 119, 79)).clone();
                 d = 0;
                 cnt++;
             }else {
                 cout << s[cnt] / 6  + 1 << endl;
+
+                //素材画像の読込
                 if((s[cnt] / 6  + 1)  < 10) {
                     FN = FolderName + "0000" + to_string(s[cnt] / 6  + 1) + ".jpg";
                     y = cv::imread(FN, 1);
@@ -178,12 +95,15 @@ int main()
                     FN = FolderName + "0" + to_string(s[cnt] / 6  + 1) + ".jpg";
                     y = cv::imread(FN, 1);
                 }
+
+                //画像サイズを小さくする(120 × 80)
                 double ResizeRate = (double)WidthSize / (double)y.size().width;
                 cv::resize(y, y, cv::Size(), ResizeRate, ResizeRate);
 
-                y = cv::Mat(y, cv::Rect(0, 0, 60, 30)).clone();
+                //画像を3 : 2に調整
+                y = cv::Mat(y, cv::Rect(0, 0, 119, 79)).clone();
 
-                //画像の合成
+                //画像を一枚ずつ横に合成
                 cv::hconcat(x, y, x);
                 cnt++;
             }
@@ -192,12 +112,14 @@ int main()
             img = x;
             e = 0;
         } else {
+            //一行全て並べられた画像を縦に合成
             vconcat(img, x, img);
         }
         d = 1;
     }
-    cv::Mat img2(img.rows*4/3, img.cols, img.type());
-    cv::resize(img, img2, img2.size(), cv::INTER_CUBIC);
-    cv::imshow("PhotoMosaicArt",img2);
+    //MosaicArtの書き込み
+    cv::imwrite("../OutputImage/output.jpg", img);
+    //MosaicArtの表示
+    cv::imshow("PhotoMosaicArt",img);
     cv::waitKey(0);
 }

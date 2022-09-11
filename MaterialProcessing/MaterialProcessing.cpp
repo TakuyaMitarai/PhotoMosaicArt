@@ -8,11 +8,10 @@ using namespace std;
 
 #define PhotoNum 1500    //素材画像の枚数
 #define HeightSize 42    //素材画像の縦のサイズ変更
-#define OriginalHeightSize 270 //元画像の縦のサイズ変更
-#define OriginalPhotoSplit 45 //モザイクアートの縦横の画像の枚数
 
 vector<int> B, G, R;
 
+//バブルソートB
 void sortB(int m, int M)
 {
    int flag = 1;
@@ -29,6 +28,7 @@ void sortB(int m, int M)
     }
 }
 
+//バブルソートG
 void sortG(int m, int M)
 {
    int flag = 1;
@@ -45,6 +45,7 @@ void sortG(int m, int M)
     }
 }
 
+//バブルソートR
 void sortR(int m, int M)
 {
    int flag = 1;
@@ -63,59 +64,18 @@ void sortR(int m, int M)
 
 int main(int argc, char *argv[])
 {
-    //元画像の処理
     FILE *fp;
-    double ResizeRate;
+    double ResizeRate; //resize()の縮小割合
     long long cnt;
-
-    if((fp = fopen("OriginalResult.csv", "w")) == NULL) {
-		cout << "ファイルがひらけませんでしたoriginal";
-		exit(-1);
-	}
-    //読込
-    cv::Mat original = cv::imread("../original/original.jpg", 1);
-
-    //resize
-    ResizeRate = (double)OriginalHeightSize / (double)original.size().width;
-    cv::resize(original, original, cv::Size(), ResizeRate, ResizeRate);
-
-    //画素値の取得
-    //初期化
-    B.resize(original.rows / OriginalPhotoSplit * original.cols / OriginalPhotoSplit);
-    G.resize(original.rows / OriginalPhotoSplit * original.cols / OriginalPhotoSplit);
-    R.resize(original.rows / OriginalPhotoSplit * original.cols / OriginalPhotoSplit);
-
-    for(int sy = 0; sy < OriginalPhotoSplit; ++sy){
-	    for(int sx = 0; sx < OriginalPhotoSplit; ++sx){
-            cnt = 0;
-            for(int y = sy * (original.rows / OriginalPhotoSplit); y < (sy + 1) * (original.rows / OriginalPhotoSplit); y++){
-                for(int x = sx * (original.cols / OriginalPhotoSplit); x < (sx + 1) * (original.cols / OriginalPhotoSplit); x++){
-                    B[cnt] = (int)original.at<cv::Vec3b>(y, x)[0];
-                    G[cnt] = (int)original.at<cv::Vec3b>(y, x)[1];
-                    R[cnt] = (int)original.at<cv::Vec3b>(y, x)[2];
-                    cnt++;
-	            }
-            }
-            //ソート
-            sortB(0, original.rows / OriginalPhotoSplit * original.cols / OriginalPhotoSplit - 1);
-            sortG(0, original.rows / OriginalPhotoSplit * original.cols / OriginalPhotoSplit - 1);
-            sortR(0, original.rows / OriginalPhotoSplit * original.cols / OriginalPhotoSplit - 1);
-
-            //出力
-            fprintf(fp, "%d,%d,%d\n", B[(original.rows / OriginalPhotoSplit * original.cols / OriginalPhotoSplit - 1) / 2], G[(original.rows / OriginalPhotoSplit * original.cols / OriginalPhotoSplit - 1) / 2], R[(original.rows / OriginalPhotoSplit * original.cols / OriginalPhotoSplit - 1) / 2]);
-        }
-    }
-    fclose(fp);
 
     //素材画像の処理
     if((fp = fopen("MaterialResult.csv", "w")) == NULL) {
 		cout << "ファイルがひらけませんでした";
 		exit(-1);
 	}
-    string FolderName = "../material/R";
-    string FN;
-    cv::Mat img;
-    cv::Mat one_img;
+    string FolderName = "../material/R"; //ファイルパス共通部分
+    string FN; //ファイルパス
+    cv::Mat img; //画像格納変数
 
     for(int i = 1; i <= PhotoNum; i++) {
         //画像入力
@@ -137,13 +97,13 @@ int main(int argc, char *argv[])
         ResizeRate = (double)HeightSize / (double)img.size().height;
         cv::resize(img, img, cv::Size(), ResizeRate, ResizeRate);
 
-        //画素値取得
         //初期化
         cnt = 0;
         B.resize(img.rows * img.cols);
         G.resize(img.rows * img.cols);
         R.resize(img.rows * img.cols);
 
+        //全画素値取得
         for(int y = 0; y < img.rows; ++y){
 	        for(int x = 0; x < img.cols; ++x){
                 B[cnt] = img.at<cv::Vec3b>(y, x)[0];
@@ -152,16 +112,16 @@ int main(int argc, char *argv[])
                 cnt++;
 	        }
         }
+
+        //各画素値のソート
         sortB(0, img.rows * img.cols - 1);
         sortG(0, img.rows * img.cols - 1);
         sortR(0, img.rows * img.cols - 1);
 
-        fprintf(fp, "%d,%d,%d\n", B[img.rows * img.cols / 2], G[img.rows * img.cols / 2], R[img.rows * img.cols / 2]);
-        for(int j = 0; j < 5; j++) {
+        //画素値の中央値の書き出し
+        for(int j = 0; j < 6; j++) {
             fprintf(fp, "%d,%d,%d\n", B[img.rows * img.cols / 2], G[img.rows * img.cols / 2], R[img.rows * img.cols / 2]);
         }
-        /*cv::Mat one_img(cv::Size(640, 480), CV_8UC3, cv::Scalar(B[img[i].rows * img[i].cols / 2], G[img[i].rows * img[i].cols / 2], R[img[i].rows * img[i].cols / 2]));
-        cv::imshow(FN, one_img);*/
     }
     fclose(fp);
     //cv::waitKey(0);
