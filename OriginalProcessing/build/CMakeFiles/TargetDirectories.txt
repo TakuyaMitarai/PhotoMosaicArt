@@ -1,3 +1,0 @@
-/Users/takuyam/Documents/Programming/PhotoMosaicArt/OriginalProcessing/build/CMakeFiles/Main.dir
-/Users/takuyam/Documents/Programming/PhotoMosaicArt/OriginalProcessing/build/CMakeFiles/edit_cache.dir
-/Users/takuyam/Documents/Programming/PhotoMosaicArt/OriginalProcessing/build/CMakeFiles/rebuild_cache.dir
